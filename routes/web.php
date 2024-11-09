@@ -1,21 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('users', [UserController::class, 'getAll']);
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-Route::get('testando', function(){
-    echo 'Chamada WEB';
-});
+Route::post('user', [UserController::class, 'create']);
 
+
+Route::get('csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
