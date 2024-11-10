@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
 class UserController extends Controller{
 
 
@@ -20,6 +20,8 @@ class UserController extends Controller{
 
         $req->validate([
             "nome" => "required|min:3",
+            "senha" => "required|min:8|confirmed",
+            "email"=> "required|email|unique:users",
             "altura"=> "required",
             "peso" => "required",
             "idade"=> "required"
@@ -37,4 +39,64 @@ class UserController extends Controller{
             ], 400);
         }
     }
+
+    public function login(Request $req){
+        $req->validate([
+            "email" => "required|email",
+            "senha" => "required"
+        ]);
+
+        if(UserModel::login($req)){
+            return response()->json([
+                'success' => true,
+                'message' => 'Login bem-sucedido.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Nome ou senha incorretos.'
+        ], 401);
+    }
+
+    public function loginApi(Request $req){
+        $req->validate([
+            "email" => "required|email",
+            "senha" => "required"
+        ]);
+
+        if($user = UserModel::login($req)){
+
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Login bem-sucedido.',
+                'token' => $token
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Nome ou senha incorretos.'
+        ], 401);
+   }
+
+   public function me(Request $req) {
+        // Verifica se o token está presente e é válido
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            return response()->json([
+                'success' => true,
+                'user' => $user
+            ]);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token inválido ou expirado.'
+            ], 401);
+        }
+    }
+
+
 }
