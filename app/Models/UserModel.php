@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 
 
@@ -62,25 +63,5 @@ class UserModel extends Model implements JWTSubject
 
     public function getAuthIdentifierName(){
         return 'id'; // Ou o nome da coluna que você usa como identificador do usuário
-    }
-
-    public function getAuthIdentifier(){
-        return $this->getKey(); // Retorna o ID do usuário
-    }
-
-    public function getAuthPassword(){
-        return $this->password; // Retorna a senha do usuário
-    }
-
-    public function getRememberToken(){
-        return $this->remember_token;
-    }
-
-    public function setRememberToken($value){
-        $this->remember_token = $value;
-    }
-
-    public function getRememberTokenName(){
-        return 'remember_token'; // Nome do campo para o token de "lembrar"
     }
 }
