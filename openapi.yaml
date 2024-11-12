@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: API_Laravel
+  description: Documentação da API para o projeto.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000/api
+    description: Servidor local de desenvolvimento
+
+paths:
+  /login:
+    post:
+      summary: Realiza o login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "usuario@exemplo.com"
+                password:
+                  type: string
+                  example: "senha_segura"
+      responses:
+        '200':
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "seu_token_jwt_aqui"
+                  message:
+                    type: string
+                    example: "Login realizado com sucesso"
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Credenciais inválidas"
+
+  
