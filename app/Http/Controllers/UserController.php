@@ -16,7 +16,7 @@ class UserController extends Controller{
         ]);
     }
 
-    public function create(Request $req) {
+    public static function create(Request $req) {
 
         $req->validate([
             "nome" => "required|min:3",
@@ -59,7 +59,7 @@ class UserController extends Controller{
         ], 401);
     }
 
-    public function loginApi(Request $req){
+    public static function loginApi(Request $req){
         $req->validate([
             "email" => "required|email",
             "senha" => "required"
